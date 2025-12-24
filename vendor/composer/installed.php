@@ -1,20 +1,20 @@
 <?php return array(
     'root' => array(
-        'name' => '__root__',
+        'name' => 'alibahari/auth-api',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '4a2248532c40b32ec07fc148b1178ed5f43904c3',
-        'type' => 'library',
+        'reference' => '27b6b98ee7553a7a02ed1eb74764fb42dfc42094',
+        'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        '__root__' => array(
+        'alibahari/auth-api' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '4a2248532c40b32ec07fc148b1178ed5f43904c3',
-            'type' => 'library',
+            'reference' => '27b6b98ee7553a7a02ed1eb74764fb42dfc42094',
+            'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
             'dev_requirement' => false,
