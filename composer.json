@@ -1,6 +1,16 @@
 {
+    "name": "alibahari/auth-api",
+    "description": "Simple PHP Auth API with JWT and Refresh Token",
+    "type": "project",
     "require": {
+        "php": ">=7.4",
         "firebase/php-jwt": "^7.0",
         "vlucas/phpdotenv": "^5.6"
-    }
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "license": "proprietary"
 }
