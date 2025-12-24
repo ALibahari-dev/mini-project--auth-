@@ -12,5 +12,8 @@
             "App\\": "src/"
         }
     },
-    "license": "proprietary"
+    "license": "proprietary",
+    "require-dev": {
+        "phpunit/phpunit": "^12.5"
+    }
 }
