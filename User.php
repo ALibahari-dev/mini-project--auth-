@@ -1,128 +1,99 @@
 <?php
-declare(strict_types=1);
-
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
-class User
-{
+class User {
     private PDO $pdo;
-    private string $jwt_secret = 'd8f3b9a5c1e6f7d9b2c3e4f6a1b2c3d4e5f6g7h8i9j0k1l2'; 
-    private int $jwt_exp = 3600; // 1 ساعت
 
-    public function __construct(PDO $pdo)
-    {
+    public function __construct(PDO $pdo) {
         $this->pdo = $pdo;
-        if(session_status() === PHP_SESSION_NONE){
+        if(session_status() === PHP_SESSION_NONE) {
             session_start();
         }
     }
 
-    // ---------------- Register ----------------
-    public function register(array $data): array
-    {
+    public function register(array $data): array {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return ['status' => false, 'message' => 'Invalid request'];
+            return ['status'=>false,'message'=>'Invalid request'];
         }
 
-        if (empty($data['username']) || empty($data['email']) || empty($data['password'])) {
-            return ['status' => false, 'message' => 'All fields are required'];
+        $username = trim($data['username'] ?? '');
+        $email = trim($data['email'] ?? '');
+        $password = $data['password'] ?? '';
+
+        if (!$username || !$email || !$password) {
+            return ['status'=>false,'message'=>'All fields are required'];
         }
 
-        // جلوگیری از ثبت ایمیل تکراری
         $check = $this->pdo->prepare("SELECT id FROM users WHERE email = :email LIMIT 1");
-        $check->execute(['email' => $data['email']]);
+        $check->execute(['email'=>$email]);
+        if ($check->fetch()) return ['status'=>false,'message'=>'Email already exists'];
 
-        if ($check->fetch()) {
-            return ['status' => false, 'message' => 'Email already exists'];
-        }
-
-        $sql = "INSERT INTO users (username, email, password) VALUES (:username, :email, :password)";
-        $stmt = $this->pdo->prepare($sql);
+        $stmt = $this->pdo->prepare("INSERT INTO users (username,email,password) VALUES (:username,:email,:password)");
         $stmt->execute([
-            'username' => $data['username'],
-            'email'    => $data['email'],
-            'password' => password_hash($data['password'], PASSWORD_DEFAULT),
+            'username'=>$username,
+            'email'=>$email,
+            'password'=>password_hash($password,PASSWORD_DEFAULT)
         ]);
 
+        return ['status'=>true,'user_id'=>$this->pdo->lastInsertId()];
+    }
+
+    public function login(array $data): array {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            return ['status'=>false,'message'=>'Invalid request'];
+        }
+
+        $email = trim($data['email'] ?? '');
+        $password = $data['password'] ?? '';
+
+        if (!$email || !$password) return ['status'=>false,'message'=>'Email and password required'];
+
+        $stmt = $this->pdo->prepare("SELECT id,username,password FROM users WHERE email=:email LIMIT 1");
+        $stmt->execute(['email'=>$email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$user || !password_verify($password,$user['password'])) {
+            return ['status'=>false,'message'=>'Invalid credentials'];
+        }
+
+        // JWT Access Token
+        $payload = [
+            'iss'=>'yourdomain.com',
+            'iat'=>time(),
+            'exp'=>time()+JWT_EXPIRE,
+            'user_id'=>$user['id']
+        ];
+        $accessToken = JWT::encode($payload, JWT_SECRET, 'HS256');
+
+        // Refresh Token
+        $refreshPayload = [
+            'user_id'=>$user['id'],
+            'iat'=>time(),
+            'exp'=>time()+JWT_REFRESH_EXPIRE
+        ];
+        $refreshToken = JWT::encode($refreshPayload, JWT_SECRET, 'HS256');
+
+        // می‌توانید refresh token را در دیتابیس ذخیره کنید برای invalid کردن آن در صورت لزوم
+
         return [
-            'status' => true,
-            'user_id' => $this->pdo->lastInsertId()
+            'status'=>true,
+            'access_token'=>$accessToken,
+            'refresh_token'=>$refreshToken,
+            'user'=>[
+                'id'=>$user['id'],
+                'username'=>$user['username'],
+                'email'=>$email
+            ]
         ];
     }
 
-    // ---------------- Login ----------------
-    public function login(array $data, bool $useJWT = true): array
-    {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            return ['status' => false, 'message' => 'Invalid request'];
-        }
-
-        if (empty($data['email']) || empty($data['password'])) {
-            return ['status' => false, 'message' => 'Email and password required'];
-        }
-
-        $sql = "SELECT id, username, password FROM users WHERE email = :email LIMIT 1";
-        $stmt = $this->pdo->prepare($sql);
-        $stmt->execute(['email' => $data['email']]);
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$user || !password_verify($data['password'], $user['password'])) {
-            return ['status' => false, 'message' => 'Invalid credentials'];
-        }
-
-        if ($useJWT) {
-            // ---------------- JWT ----------------
-            $payload = [
-                'iss' => "yourdomain.com",
-                'iat' => time(),
-                'exp' => time() + $this->jwt_exp,
-                'user_id' => $user['id'],
-                'username' => $user['username']
-            ];
-
-            $token = JWT::encode($payload, $this->jwt_secret, 'HS256');
-
-            return [
-                'status' => true,
-                'token' => $token,
-                'user' => [
-                    'id' => $user['id'],
-                    'username' => $user['username'],
-                    'email' => $data['email']
-                ]
-            ];
-        } else {
-            // ---------------- Session ----------------
-            $_SESSION['user'] = [
-                'id' => $user['id'],
-                'username' => $user['username'],
-                'email' => $data['email']
-            ];
-
-            return [
-                'status' => true,
-                'message' => 'Logged in via session',
-                'user' => $_SESSION['user']
-            ];
-        }
-    }
-
-    // ---------------- JWT Verification ----------------
-    public function verifyJWT(string $token): array
-    {
+    public function verifyJWT(string $token): array {
         try {
-            $decoded = JWT::decode($token, new Key($this->jwt_secret, 'HS256'));
-            return ['status' => true, 'data' => (array)$decoded];
+            $decoded = JWT::decode($token,new Key(JWT_SECRET,'HS256'));
+            return ['status'=>true,'data'=>(array)$decoded];
         } catch (\Exception $e) {
-            return ['status' => false, 'message' => 'Invalid or expired token'];
+            return ['status'=>false,'message'=>'Invalid or expired token'];
         }
-    }
-
-    // ---------------- Logout Session ----------------
-    public function logout()
-    {
-        session_destroy();
-        return ['status' => true, 'message' => 'Logged out'];
     }
 }

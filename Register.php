@@ -1,8 +1,8 @@
 <?php
-$_SERVER['REQUEST_METHOD'] = 'POST'; // اضافه کن برای تست CLI
+$_SERVER['REQUEST_METHOD'] = 'POST'; // شبیه‌سازی POST برای CLI
 
-require 'db.php';
-require 'User.php';
+require __DIR__ . '/config.php';
+require __DIR__ . '/User.php';
 
 $user = new User($pdo);
 

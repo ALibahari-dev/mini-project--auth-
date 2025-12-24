@@ -1,16 +1,14 @@
 <?php
-require 'vendor/autoload.php';  // اضافه کن این خط
-
-require 'db.php';
-require 'User.php';
+require __DIR__ . '/config.php';   // ← باید اول باشد
+require __DIR__ . '/User.php';
 
 $_SERVER['REQUEST_METHOD'] = 'POST';
 
 $user = new User($pdo);
 
 $result = $user->login([
-    'email' => 'ali@test1.com',
+    'email'    => 'ali@test2.com',
     'password' => '12345678'
-], true);
+]);
 
 print_r($result);
