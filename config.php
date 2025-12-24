@@ -16,5 +16,5 @@ $pdo = new PDO(
 
 // JWT config
 define('JWT_SECRET', $_ENV['JWT_SECRET']);
-define('JWT_EXPIRE', (int)$_ENV['JWT_EXPIRE'])
+define('JWT_EXPIRE', (int)$_ENV['JWT_EXPIRE']);
 define('JWT_REFRESH_EXPIRE', (int)$_ENV['JWT_REFRESH_EXPIRE']);
