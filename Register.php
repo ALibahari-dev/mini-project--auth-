@@ -8,7 +8,7 @@ $user = new User($pdo);
 
 $result = $user->register([
     'username' => 'ali',
-    'email'    => 'ali@test1.com',
+    'email'    => 'ali@test.com',
     'password' => '12345678'
 ]);
 

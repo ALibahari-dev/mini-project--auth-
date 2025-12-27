@@ -3,7 +3,11 @@
         'name' => 'alibahari/auth-api',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
+<<<<<<< HEAD
+        'reference' => '9da67aede408956d447d4ee69f47bb68a4dc9de3',
+=======
         'reference' => '94b0c188813d442ae2b43e3462a49d95d5d31eeb',
+>>>>>>> main
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +17,11 @@
         'alibahari/auth-api' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
+<<<<<<< HEAD
+            'reference' => '9da67aede408956d447d4ee69f47bb68a4dc9de3',
+=======
             'reference' => '94b0c188813d442ae2b43e3462a49d95d5d31eeb',
+>>>>>>> main
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
