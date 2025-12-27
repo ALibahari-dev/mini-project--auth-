@@ -1,52 +1,94 @@
 <?php
-declare(strict_types=1);
+session_start();
 
-require __DIR__ . '/config.php';
-require __DIR__ . '/User.php';
-
-/**
- * Headers
- */
-header('Content-Type: application/json; charset=utf-8');
-
-/**
- * فقط POST مجازه
- */
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode([
-        'status'  => false,
-        'message' => 'Method Not Allowed'
-    ]);
+// اگر لاگین شده، مستقیم بره داشبورد
+if (isset($_SESSION['access_token'])) {
+    header('Location: dashboard.php');
     exit;
 }
+?>
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+        .box {
+            background: white;
+            padding: 24px;
+            width: 320px;
+            border-radius: 8px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
 
-/**
- * گرفتن ورودی JSON
- */
-$input = json_decode(file_get_contents('php://input'), true);
+<div class="box">
+    <h3>ورود</h3>
 
-if (!$input || empty($input['email']) || empty($input['password'])) {
-    http_response_code(422);
-    echo json_encode([
-        'status'  => false,
-        'message' => 'Email and password are required'
-    ]);
-    exit;
-}
+    <form id="loginForm">
+        <input type="email" id="email" placeholder="ایمیل" required>
+        <input type="password" id="password" placeholder="رمز عبور" required>
+        <button type="submit">ورود</button>
+    </form>
 
-$user = new User($pdo);
+    <div id="message" class="error"></div>
+</div>
 
-/**
- * Login
- */
-$result = $user->login([
-    'email'    => $input['email'],
-    'password' => $input['password']
-]);
+<script>
+document.getElementById('loginForm').addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-/**
- * خروجی استاندارد API
- */
-http_response_code($result['status'] ? 200 : 401);
-echo json_encode($result);
+    const email    = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const message  = document.getElementById('message');
+
+    message.textContent = '';
+
+    const res = await fetch('http://localhost:8000/api-login.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+    });
+
+    const data = await res.json();
+
+    if (!data.status) {
+        message.textContent = data.message || 'خطا در ورود';
+        return;
+    }
+
+    // ارسال توکن‌ها به PHP برای ذخیره در session
+    const save = await fetch('save-session.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    if (save.ok) {
+        window.location.href = 'dashboard.php';
+    }
+});
+</script>
+
+</body>
+</html>
