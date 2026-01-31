@@ -3,7 +3,7 @@
         'name' => 'alibahari/auth-api',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '1241b60141a91752c37ad0dd2baa28625a65867b',
+        'reference' => 'd2190ab16e93c5a9dff5e1055a16b8cb83a3e429',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'alibahari/auth-api' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '1241b60141a91752c37ad0dd2baa28625a65867b',
+            'reference' => 'd2190ab16e93c5a9dff5e1055a16b8cb83a3e429',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -47,9 +47,9 @@
             'dev_requirement' => false,
         ),
         'graham-campbell/result-type' => array(
-            'pretty_version' => 'v1.1.3',
-            'version' => '1.1.3.0',
-            'reference' => '3ba905c11371512af9d9bdd27d99b782216b6945',
+            'pretty_version' => 'v1.1.4',
+            'version' => '1.1.4.0',
+            'reference' => 'e01f4a821471308ba86aa202fed6698b6b695e3b',
             'type' => 'library',
             'install_path' => __DIR__ . '/../graham-campbell/result-type',
             'aliases' => array(),
@@ -137,9 +137,9 @@
             'dev_requirement' => false,
         ),
         'phpoption/phpoption' => array(
-            'pretty_version' => '1.9.4',
-            'version' => '1.9.4.0',
-            'reference' => '638a154f8d4ee6a5cfa96d6a34dfbe0cffa9566d',
+            'pretty_version' => '1.9.5',
+            'version' => '1.9.5.0',
+            'reference' => '75365b91986c2405cf5e1e012c5595cd487a98be',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpoption/phpoption',
             'aliases' => array(),
@@ -191,9 +191,9 @@
             'dev_requirement' => true,
         ),
         'phpunit/phpunit' => array(
-            'pretty_version' => '12.5.4',
-            'version' => '12.5.4.0',
-            'reference' => '4ba0e923f9d3fc655de22f9547c01d15a41fc93a',
+            'pretty_version' => '12.5.8',
+            'version' => '12.5.8.0',
+            'reference' => '37ddb96c14bfee10304825edbb7e66d341ec6889',
             'type' => 'library',
             'install_path' => __DIR__ . '/../phpunit/phpunit',
             'aliases' => array(),
@@ -325,8 +325,8 @@
         'psr/http-factory-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '*',
-                1 => '1.0',
+                0 => '1.0',
+                1 => '*',
             ),
         ),
         'psr/http-message' => array(
@@ -341,8 +341,8 @@
         'psr/http-message-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '*',
-                1 => '1.0',
+                0 => '1.0',
+                1 => '*',
             ),
         ),
         'psr/log' => array(
@@ -364,9 +364,9 @@
             'dev_requirement' => true,
         ),
         'sebastian/comparator' => array(
-            'pretty_version' => '7.1.3',
-            'version' => '7.1.3.0',
-            'reference' => 'dc904b4bb3ab070865fa4068cd84f3da8b945148',
+            'pretty_version' => '7.1.4',
+            'version' => '7.1.4.0',
+            'reference' => '6a7de5df2e094f9a80b40a522391a7e6022df5f6',
             'type' => 'library',
             'install_path' => __DIR__ . '/../sebastian/comparator',
             'aliases' => array(),
@@ -517,9 +517,9 @@
             'dev_requirement' => true,
         ),
         'vlucas/phpdotenv' => array(
-            'pretty_version' => 'v5.6.2',
-            'version' => '5.6.2.0',
-            'reference' => '24ac4c74f91ee2c193fa1aaa5c249cb0822809af',
+            'pretty_version' => 'v5.6.3',
+            'version' => '5.6.3.0',
+            'reference' => '955e7815d677a3eaa7075231212f2110983adecc',
             'type' => 'library',
             'install_path' => __DIR__ . '/../vlucas/phpdotenv',
             'aliases' => array(),
