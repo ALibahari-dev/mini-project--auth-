@@ -1,6 +1,10 @@
 <?php
 session_start();
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 // اگر قبلاً لاگین شده، مستقیم بره داشبورد
 if (isset($_SESSION['access_token'])) {
     header('Location: dashboard.php');
