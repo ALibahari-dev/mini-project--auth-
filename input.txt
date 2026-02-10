@@ -1,0 +1,17 @@
+# ثبت نام
+php user-cli.php register alibahari ali@example.com 12345678
+
+# لاگین
+php user-cli.php login ali@example.com 12345678
+
+# ریست پسورد
+php user-cli.php reset-password ali@example.com newpass123
+
+# فعال کردن حساب
+php user-cli.php activate ali@example.com
+
+# غیرفعال کردن حساب
+php user-cli.php deactivate ali@example.com
+
+# نمایش لیست کاربران
+php user-cli.php list
